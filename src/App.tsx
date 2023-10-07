@@ -1,13 +1,15 @@
-import { useQuery } from "react-query";
-import "./App.css";
+// import { useQuery } from "react-query";
 // import axios from "axios";
 // import { ITodo } from "./types/todos.types";
-import { getAllTodos } from "./api/todosAPI";
+// import { getAllTodos } from "./api/todosAPI";
+import { useAllTodos } from "./hooks/useHooks";
 
 function App() {
-  const { isLoading, data } = useQuery(["todos"], () => getAllTodos(), {
-    select: ({ data }) => data,
-  });
+  const { isLoading, data } = useAllTodos();
+
+  // const { isLoading, data } = useQuery(["todos"], () => getAllTodos(), {
+  //   select: ({ data }) => data,
+  // });
 
   // const { isLoading, data } = useQuery(
   //   ["todos", 1],

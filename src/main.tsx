@@ -1,8 +1,11 @@
+/* eslint-disable react-refresh/only-export-components */
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Test from "./Test.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -13,10 +16,23 @@ const queryClient = new QueryClient({
   },
 });
 
+const Root = () => {
+  return (
+    <div className="page">
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/test" element={<Test />} />
+      </Routes>
+    </div>
+  );
+};
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <Root />
+      </QueryClientProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );
