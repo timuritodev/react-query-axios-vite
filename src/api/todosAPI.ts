@@ -4,7 +4,7 @@ import { ITodo } from "../types/todos.types";
 const baseURL = "https://jsonplaceholder.typicode.com";
 
 export async function getAllTodos() {
-  return axios.get<ITodo[]>(`${baseURL}/todos`);
+  return axios.get<ITodo[]>(`${baseURL}/todos/?_start=0&_limit=5`);
 }
 
 export async function getTodoById(id: string) {

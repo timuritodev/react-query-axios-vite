@@ -2,11 +2,13 @@
 // import axios from "axios";
 // import { ITodo } from "./types/todos.types";
 // import { getAllTodos } from "./api/todosAPI";
-import { useAllTodos } from "./hooks/useHooks";
+import { useQueryClient } from "react-query";
+import { useAllTodos } from "../hooks/useHooks";
 
 function App() {
   const { isLoading, data } = useAllTodos();
 
+  const queryClient = useQueryClient();
   // const { isLoading, data } = useQuery(["todos"], () => getAllTodos(), {
   //   select: ({ data }) => data,
   // });
@@ -21,6 +23,7 @@ function App() {
 
   return (
     <div>
+      <button onClick={()=> queryClient.invalidateQueries(['todos'])}>Refresh</button>
       {isLoading ? (
         <div>Loading...</div>
       ) : data?.length ? (
