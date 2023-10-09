@@ -1,5 +1,5 @@
 .app__container {
-  background-color: red;
+  background-color: rgb(125, 120, 120);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;

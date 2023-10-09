@@ -2,7 +2,7 @@
 // import axios from "axios";
 // import { ITodo } from "./types/todos.types";
 // import { getAllTodos } from "./api/todosAPI";
-import { useMutation, useQueryClient } from "react-query";
+import { useIsFetching, useMutation, useQueryClient } from "react-query";
 import { useAllTodos } from "../hooks/useHooks";
 import "./App.css";
 import { SyntheticEvent, useState } from "react";
@@ -10,7 +10,10 @@ import { createTodo } from "../api/todosAPI";
 function App() {
   const { isLoading, data, refetch } = useAllTodos();
 
+  const countFetching = useIsFetching(); // подсчет сколько раз обновилась страница
+
   const queryClient = useQueryClient();
+  
   // const { isLoading, data } = useQuery(["todos"], () => getAllTodos(), {
   //   select: ({ data }) => data,
   // });
@@ -25,14 +28,17 @@ function App() {
 
   const [title, setTitle] = useState("");
 
-  const {mutate} = useMutation(["create todo"], (title: string) => createTodo(title),
-  {
-    async onSuccess(){
-      setTitle('');
-      alert('Todo created');
-      await refetch(); // обновляем массив после создания Todo
+  const { mutate } = useMutation(
+    ["create todo"],
+    (title: string) => createTodo(title),
+    {
+      async onSuccess() {
+        setTitle("");
+        alert("Todo created");
+        await refetch(); // обновляем массив после создания Todo
+      },
     }
-  });
+  );
 
   const submitHandler = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -53,6 +59,7 @@ function App() {
           />
           <button>Create Todo</button>
         </form>
+        <h3>Count fetching:{countFetching}</h3>
       </div>
       <div>
         <h1>Todos:</h1>

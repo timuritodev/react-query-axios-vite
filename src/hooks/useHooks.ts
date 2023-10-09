@@ -17,6 +17,8 @@ import { getAllTodos, getTodoById } from "../api/todosAPI";
 export const useAllTodos = () => {
   return useQuery(["todos"], () => getAllTodos(), {
     select: ({ data }) => data,
+    // staleTime: 1000, // кол-во миллисекунд сколько данные будут считаться свежими, после перезагрузки страницы если время(staleTime) прошло то будет сделан новый запрос на сервер
+    // cacheTime: 1000, // кол-во миллисекунд после которого нужно удалить данные из кеша
     // initialData() {
     //   return data;
     // },
