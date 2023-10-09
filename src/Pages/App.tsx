@@ -2,11 +2,13 @@
 // import axios from "axios";
 // import { ITodo } from "./types/todos.types";
 // import { getAllTodos } from "./api/todosAPI";
-import { useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { useAllTodos } from "../hooks/useHooks";
-
+import "./App.css";
+import { SyntheticEvent, useState } from "react";
+import { createTodo } from "../api/todosAPI";
 function App() {
-  const { isLoading, data } = useAllTodos();
+  const { isLoading, data, refetch } = useAllTodos();
 
   const queryClient = useQueryClient();
   // const { isLoading, data } = useQuery(["todos"], () => getAllTodos(), {
@@ -21,22 +23,56 @@ function App() {
   //   }
   // );
 
+  const [title, setTitle] = useState("");
+
+  const {mutate} = useMutation(["create todo"], (title: string) => createTodo(title),
+  {
+    async onSuccess(){
+      setTitle('');
+      alert('Todo created');
+      await refetch(); // обновляем массив после создания Todo
+    }
+  });
+
+  const submitHandler = (e: SyntheticEvent) => {
+    e.preventDefault();
+    console.log(title);
+    mutate(title);
+  };
+
   return (
-    <div>
-      <button onClick={()=> queryClient.invalidateQueries(['todos'])}>Refresh</button>
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : data?.length ? (
-        // <h1>Todo: {data?.title}</h1>
-        data.map((item) => (
-          <div>
-            <b>{item.id}: </b>
-            {item.title}
-          </div>
-        ))
-      ) : (
-        <h2>Data not found</h2>
-      )}
+    <div className="app__container">
+      <div>
+        <h1>Create Todo:</h1>
+        <form onSubmit={submitHandler}>
+          <input
+            type="text"
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
+            placeholder="Enter Todo title"
+          />
+          <button>Create Todo</button>
+        </form>
+      </div>
+      <div>
+        <h1>Todos:</h1>
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : data?.length ? (
+          // <h1>Todo: {data?.title}</h1>
+          data.map((item) => (
+            <div key={item.id}>
+              <b>{item.id}: </b>
+              {item.title}
+            </div>
+          ))
+        ) : (
+          <h2>Data not found</h2>
+        )}
+        <button onClick={() => queryClient.invalidateQueries(["todos"])}>
+          Refresh
+        </button>
+      </div>
     </div>
   );
 }

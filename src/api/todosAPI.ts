@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ITodo } from "../types/todos.types";
+import { ICreateTodo, ITodo } from "../types/todos.types";
 
 const baseURL = "https://jsonplaceholder.typicode.com";
 
@@ -10,6 +10,14 @@ export async function getAllTodos() {
 export async function getTodoById(id: string) {
   return axios.get<ITodo>(`${baseURL}/todos/${id}`);
 }
+
+export async function createTodo(title: string) {
+    return axios.post<unknown, unknown, ICreateTodo>(`${baseURL}/todos/`,{
+        title,
+        userId: 1,
+        completed: false,
+    } );
+  }
 
 // with classes
 
